@@ -29,7 +29,7 @@ body::before {
   content: '';
   position: fixed;
   inset: 0;
-  background: 
+  background:
     radial-gradient(circle at 20% 50%, rgba(255,0,128,0.18) 0%, transparent 55%),
     radial-gradient(circle at 80% 80%, rgba(0,255,255,0.14) 0%, transparent 55%),
     radial-gradient(circle at 40% 20%, rgba(255,140,0,0.09) 0%, transparent 45%),
@@ -41,13 +41,13 @@ body::before {
 
 @keyframes sunsetShift {
   0%,100% { transform: scale(1) rotate(0deg); opacity: 0.82; }
-  50%     { transform: scale(1.08) rotate(1.5deg); opacity: 1; }
+  50% { transform: scale(1.08) rotate(1.5deg); opacity: 1; }
 }
 
 .grid-bg {
   position: fixed;
   inset: 0;
-  background-image: 
+  background-image:
     linear-gradient(rgba(0,255,255,0.04) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255,0,128,0.04) 1px, transparent 1px);
   background-size: 60px 60px;
@@ -90,7 +90,7 @@ body::before {
 
 @keyframes pulse {
   0%,100% { box-shadow: 0 0 20px rgba(255,0,128,0.5); }
-  50%     { box-shadow: 0 0 45px rgba(255,0,128,0.85); }
+  50% { box-shadow: 0 0 45px rgba(255,0,128,0.85); }
 }
 
 h1 {
@@ -109,7 +109,7 @@ h1 {
 
 @keyframes flicker {
   0%,100% { opacity: 1; text-shadow: 0 0 35px rgba(0,255,255,0.4); }
-  50%     { opacity: 0.92; text-shadow: 0 0 60px rgba(255,0,128,0.6); }
+  50% { opacity: 0.92; text-shadow: 0 0 60px rgba(255,0,128,0.6); }
 }
 
 .subtitle {
@@ -233,8 +233,94 @@ input:focus, select:focus, textarea:focus {
   display: none !important;
 }
 
+/* ──────────────────────────────────────────────
+   RESPONSIVE / ADAPTATION MOBILE
+   ────────────────────────────────────────────── */
+
+/* Tablette et mobile (largeur ≤ 768px) */
 @media (max-width: 768px) {
-  h1 { font-size: 2.4rem; }
-  .form-wrapper { padding: 1.5rem; }
-  .container { padding: 1rem; }
+  .landing {
+    padding: 3rem 1.5rem 2rem;          /* moins de padding latéral et bas */
+    justify-content: flex-start;         /* commence en haut */
+  }
+
+  .logo {
+    font-size: 4.8rem;                   /* logo plus raisonnable sur petit écran */
+    margin: -1.5rem 0 0.8rem 0;          /* remonte le logo */
+    letter-spacing: -1.5px;
+  }
+
+  .subtitle {
+    font-size: 1.9rem;
+    margin: 0.4rem 0 1rem;
+  }
+
+  .tagline {
+    font-size: 1.3rem;
+    margin: 1.2rem 0 2rem;
+    line-height: 1.45;
+  }
+
+  .start-btn {
+    padding: 1.1rem 3.2rem;
+    font-size: 1.45rem;
+    border-radius: 50px;
+    min-width: 85%;                      /* plus large pour toucher facile */
+    margin: 1rem 0 3rem;
+  }
+
+  .info {
+    margin-top: auto;
+    font-size: 1rem;
+    padding-bottom: 1.8rem;
+  }
+}
+
+/* Très petits écrans (ex: iPhone SE, vieux Android) */
+@media (max-width: 480px) {
+  .logo {
+    font-size: 4rem;
+    margin: -1.2rem 0 0.6rem 0;
+  }
+
+  .subtitle {
+    font-size: 1.6rem;
+  }
+
+  .tagline {
+    font-size: 1.15rem;
+    margin: 1rem 0 1.8rem;
+  }
+
+  .start-btn {
+    padding: 1rem 2.8rem;
+    font-size: 1.35rem;
+    min-width: 90%;
+  }
+
+  .info {
+    font-size: 0.95rem;
+    padding-bottom: 1.5rem;
+  }
+}
+
+/* Optionnel : améliore la vidéo sur mobile (évite qu'elle soit coupée ou lourde) */
+.video-bg {
+  will-change: transform; /* optimisation perf */
+}
+
+/* Si la vidéo bug sur certains mobiles, tu peux ajouter un fallback image */
+@media (max-width: 768px) {
+  .video-bg {
+    display: none; /* masque la vidéo sur très petit écran si elle rame */
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: url('videos/poster-mobile.jpg') center/cover no-repeat; /* image fixe de remplacement */
+    z-index: -2;
+  }
 }
