@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Amnesia Horizon - Candidature Staff</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="grid-bg"></div>
+
+  <div class="container">
+    <div class="header">
+      <div class="server-badge">Serveur FiveM</div>
+      <h1>Amnesia Horizon</h1>
+      <div class="subtitle">Candidature Staff - Phase 1</div>
+    </div>
+
+    <div class="form-wrapper">
+      <form id="staffForm">
+        <div class="section-title">Identité Gaming</div>
+
+        <div class="form-group">
+          <label for="pseudo" class="required">Pseudo / Nom RP</label>
+          <input type="text" id="pseudo" name="pseudo" required placeholder="Votre pseudo en jeu">
+        </div>
+
+        <div class="form-group">
+          <label for="discord" class="required">Discord ID</label>
+          <input type="text" id="discord" name="discord" required placeholder="Ex: Pseudo#1234 ou ID numérique">
+        </div>
+
+        <div class="form-group">
+          <label for="age">Âge</label>
+          <input type="number" id="age" name="age" min="16" max="99" placeholder="Votre âge">
+        </div>
+
+        <div class="section-title">Expérience & Poste</div>
+
+        <div class="form-group">
+          <label class="required">Ancienneté FiveM</label>
+          <select name="anciennete" required>
+            <option value="">Choisir...</option>
+            <option value="debutant">Je suis débutant (- de 6 mois)</option>
+            <option value="intermediaire">Je joue assez souvent (entre 6 mois et 2 ans), a détailler plus tard</option>
+            <option value="expert">Je joue tout le temps (2 ans+)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Poste(s) souhaité(s)</label>
+          <div class="checkbox-group">
+            <label class="checkbox-item"><input type="checkbox" name="poste" value="admin"> Administrateur</label>
+            <label class="checkbox-item"><input type="checkbox" name="poste" value="modo"> Modérateur</label>
+            <label class="checkbox-item"><input type="checkbox" name="poste" value="helper"> Helper</label>
+            <label class="checkbox-item"><input type="checkbox" name="poste" value="dev"> Super admin</label>
+            <label class="checkbox-item"><input type="checkbox" name="poste" value="builder"> Autres</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="experience">Expériences staff précédente (sois hônnetes, n'invente rien)</label>
+          <textarea id="experience" name="experience" rows="5" placeholder="Serveurs où vous avez été staff, rôle, durée..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="motivation">Motivation (1-10)</label>
+          <input type="range" id="motivation" name="motivation" min="1" max="10" value="5" oninput="document.getElementById('motivValue').textContent = this.value">
+          <div class="range-value" id="motivValue">5 / 10</div>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn">
+          Envoyer la Candidature 🚀
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // TON WEBHOOK RÉEL (celui que tu utilisais déjà)
+    const WEBHOOK_PHASE1 = 'https://discord.com/api/webhooks/1478500750425456825/y1ZqEPK_VDXO8zo-fLGXeFKwnUNyKxp2s7dhmAVOp5ml_CL3fmhCu6BDR7E3EOJ2Huj-';
+
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('Page chargée – script initialisé');
+
+      const form = document.getElementById('staffForm');
+      if (!form) {
+        console.error('ERREUR : <form id="staffForm"> introuvable !');
+        alert('Erreur interne : formulaire non détecté.');
+        return;
+      }
+
+      console.log('Formulaire trouvé – écouteur attaché');
+
+      form.addEventListener('submit', async function(e) {
+        e.preventDefault(); // BLOQUE LE REFRESH IMMÉDIATEMENT
+        console.log('→ Submit capturé ! Refresh bloqué');
+
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = true;
+        btn.textContent = 'Envoi en cours...';
+
+        const formData = new FormData(e.target);
+        const data = Object.fromEntries(formData);
+        const postes = Array.from(formData.getAll('poste'));
+
+        const payload = {
+          content: `**Nouvelle candidature** de ${data.pseudo || 'Anonyme'}`,
+          embeds: [{
+            title: `🌆 NOUVELLE CANDIDATURE - ${data.pseudo || 'Anonyme'}`,
+            description: 'Phase 1 reçue - Approuvez ou refusez avec les boutons ci-dessous',
+            color: 0xff00aa,
+            fields: [
+              { name: '🆔 Identité', value: `Pseudo: ${data.pseudo}\nDiscord: ${data.discord}\nÂge: ${data.age || '—'}`, inline: false },
+              { name: '🎯 Postes', value: postes.join(', ') || '—', inline: true },
+              { name: '📊 Ancienneté', value: data.anciennete || '—', inline: true },
+              { name: '🔥 Motivation', value: `${data.motivation || '—'}/10`, inline: true },
+              { name: '💼 Expérience', value: data.experience || 'Aucune', inline: false }
+            ],
+            footer: { text: `Discord ID: ${data.discord} • Cliquez pour agir` },
+            timestamp: new Date().toISOString()
+          }],
+          components: [{
+            type: 1,
+            components: [
+              { type: 2, style: 3, label: '✅ Approuver', custom_id: 'approve_candidate' },
+              { type: 2, style: 4, label: '❌ Refuser', custom_id: 'refuse_candidate' }
+            ]
+          }]
+        };
+
+        console.log('Payload prêt à envoyer :', payload);
+
+        try {
+          console.log('Envoi au webhook...');
+          const response = await fetch(WEBHOOK_PHASE1, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+
+          console.log('Réponse webhook, statut :', response.status);
+
+          if (!response.ok) {
+            throw new Error(`Erreur HTTP ${response.status}`);
+          }
+
+          alert('Candidature envoyée ! Le staff va la traiter.');
+        } catch (err) {
+          console.error('Erreur envoi :', err);
+          alert('Erreur lors de l’envoi : ' + err.message);
+        } finally {
+          btn.disabled = false;
+          btn.textContent = 'Envoyer la Candidature 🚀';
+        }
+      });
+    });
+  </script>
+</body>
+</html>

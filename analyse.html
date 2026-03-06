@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Amnesia Horizon · Phase 2 – Test 1</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .total-score { text-align:center; font-size:2.2rem; color:var(--miami-orange); margin:1.5rem 0; font-weight:bold; }
+    .question-card.selected { border:2px solid var(--miami-orange); background:rgba(255,140,0,0.08); }
+    .analysis-section { margin-top:3rem; padding:2rem; background:rgba(0,0,0,0.6); border-radius:12px; }
+    .analysis-section h2 { text-align:center; color:var(--miami-orange); margin-bottom:1.5rem; }
+    .analysis-item { margin-bottom:1.5rem; padding:1rem; border-left:4px solid var(--miami-orange); background:rgba(255,255,255,0.05); }
+    .best-answer { color:#00ff88; font-weight:bold; margin-top:0.8rem; }
+    .best-explain { color:#ccc; font-size:0.95rem; margin-top:0.4rem; }
+    .global-feedback { text-align:center; font-size:1.4rem; margin-top:2rem; padding:1.5rem; border-radius:8px; }
+    .excellent { background:rgba(0,255,0,0.2); color:#00ff00; }
+    .good      { background:rgba(255,165,0,0.2); color:#ffa500; }
+    .average   { background:rgba(255,255,0,0.2); color:#ffff00; }
+    .poor      { background:rgba(255,0,0,0.2); color:#ff0000; }
+  </style>
+</head>
+<body>
+  <div class="grid-bg"></div>
+
+  <div class="container">
+    <div class="header">
+      <div class="server-badge">Serveur FiveM</div>
+      <h1>Amnesia Horizon</h1>
+      <div class="subtitle">Phase 2 – Test 1 (Staff only)</div>
+      <div class="total-score" id="totalScore">Score : 0 / 100</div>
+      <button class="submit-btn" onclick="generateAnalysis()" style="margin:2rem auto; display:block;">Générer Rapport d'Analyse</button>
+    </div>
+
+    <div id="test-container" class="form-wrapper">
+      <h2 style="text-align:center; color:var(--miami-orange); margin-bottom:2rem;">
+        Test 1 – Jugement & personnalité staff (100 points max)
+      </h2>
+      <p style="text-align:center; color:#aaa; margin-bottom:3rem; font-size:1.1rem;">
+        Pose les questions à voix haute. Coche la réponse du candidat en cliquant dessus.<br>
+        Une seule réponse par question. Clique sur "Générer Rapport" pour voir le score + les meilleures réponses attendues.
+      </p>
+
+      <!-- Question 1 -->
+      <div class="question-card" data-score="0" data-category="gestion-conflit" data-best="A" data-best-text="Réaction ferme et immédiate face à une menace de leak + insultes graves → dissuasion et protection du staff.">
+        <div class="question-text">1. Un joueur régulier insulte massivement le staff après un mute 30 min et menace de leak des screens privés du staff.</div>
+        <div class="question-options">
+          <button type="button" class="question-btn" onclick="selectAnswer(1,'A',this,10)">A. Ban 7 jours immédiat pour menace + insultes</button>
+          <button type="button" class="question-btn" onclick="selectAnswer(1,'B',this,4)">B. Mute 24h et fermeture ticket</button>
+          <button type="button" class="question-btn" onclick="selectAnswer(1,'C',this,8)">C. Vocal avec un autre staff pour dédramatiser</button>
+          <button type="button" class="question-btn" onclick="selectAnswer(1,'D',this,2)">D. Ignorer et laisser ragequit</button>
+          <button type="button" class="question-btn" onclick="selectAnswer(1,'E',this,0)">E. Leak moi-même ses messages</button>
+        </div>
+      </div>
+
+      <!-- Question 2 -->
+      <div class="question-card" data-score="0" data-category="gestion-conflit" data-best="A" data-best-text="Analyse impartiale des preuves avant sanction → justice et équité.">
+        <div class="question-text">2. Deux groupes de 8-10 joueurs se report mutuellement avec vidéos (120 connectés).</div>
+        <div class="question-options">
+          <button type="button" class="question-btn" onclick="selectAnswer(2,'A',this,10)">A. Regarder les deux vidéos avant toute sanction</button>
+          <button type="button" class="question-btn" onclick="selectAnswer(2,'B',this,6)">B. Mute leaders 1h et calmer les autres</button>
+          <button type="button" class="question-btn" onclick="selectAnswer(2,'C',this,3)">C. Kick tout le monde de la zone</button>
+          <button type="button" class="question-btn" onclick="selectAnswer(2,'D',this,8)">D. Ticket privé par groupe</button>
+          <button type="button" class="question-btn" onclick="selectAnswer(2,'E',this,0)">E. Laisser faire car c’est du RP</button>
+        </div>
+      </div>
+
+      <!-- Question 3 -->
+      <div class="question-card" data-score="0" data-category="ethique" data-best="A" data-best-text="Suspension immédiate + enquête → protection de la confidentialité du staff.">
+        <div class="question-text">3. Un helper leak des infos internes du staff sur son Discord perso (preuves screenshots).</div>
+        <div class="question-options">
+          <button type="button" class="question-btn" onclick="selectAnswer(3,'A',this,10)">A. Suspension immédiate + discussion responsables</button>
+          <button type="button" class="question-btn" onclick="selectAnswer(3,'B',this,4)">B. Demander d’effacer et surveiller</button>
+          <button type="button" class="question-btn" onclick="selectAnswer(3,'C',this,7)">C. Mute Discord staff + attendre version</button>
+          <button type="button" class="question-btn" onclick="selectAnswer(3,'D',this,0)">D. Le défendre car il parle à ses amis</button>
+        </div>
+      </div>
+
+      <!-- Question 4 -->
+      <div class="question-card" data-score="0" data-category="gestion-technique" data-best="A" data-best-text="Wipe + avertissement + surveillance → dissuasion forte contre l’abus de bug.">
+        <div class="question-text">4. Bug duplication items chers – 3 joueurs abusent massivement – excuses "on pensait autorisé".</div>
+        <div class="question-options">
+          <button type="button" class="question-btn" onclick="selectAnswer(4,'A',this,10)">A. Wipe items + avertissement sévère + surveillance 30 jours</button>
+          <button type="button" class="question-btn" onclick="selectAnswer(4,'B',this,5)">B. Ban 3 jours + rollback individuel</button>
+          <button type="button" class="question-btn" onclick="selectAnswer(4,'C',this,8)">C. Rollback + ban 7 jours gros profiteurs</button>
+          <button type="button" class="question-btn" onclick="selectAnswer(4,'D',this,2)">D. Laisser car staff a laissé le bug</button>
+        </div>
+      </div>
+
+      <!-- Question 5 -->
+      <div class="question-card" data-score="0" data-category="gestion-conflit" data-best="A" data-best-text="Sanction temporaire + communication publique calme → équilibre autorité et image serveur.">
+        <div class="question-text">5. Streameuse 800 viewers insulte serveur/staff en live et incite au troll.</div>
+        <div class="question-options">
+          <button type="button" class="question-btn" onclick="selectAnswer(5,'A',this,10)">A. Ban temporaire 3-7 jours + message public calme</button>
+          <button type="button" class="question-btn" onclick="selectAnswer(5,'B',this,6)">B. Mute en jeu + contact modérateur Discord</button>
+          <button type="button" class="question-btn" onclick="selectAnswer(5,'C',this,3)">C. Ignorer pour pas faire de pub</button>
+          <button type="button" class="question-btn" onclick="selectAnswer(5,'D',this,0)">D. Clashe en live moi-même</button>
+        </div>
+      </div>
+
+      <!-- Question 6 -->
+      <div class="question-card" data-score="0" data-category="ethique" data-best="A" data-best-text="Refus total de passe-droit → intégrité avant amitié.">
+        <div class="question-text">6. Ami proche du staff reporté pour cheat évident – DM : "c’est mon pote, passe l’éponge".</div>
+        <div class="question-options">
+          <button type="button" class="question-btn" onclick="selectAnswer(6,'A',this,10)">A. Refuser et traiter normalement</button>
+          <button type="button" class="question-btn" onclick="selectAnswer(6,'B',this,3)">B. Indulgent mais sanction quand même</button>
+          <button type="button" class="question-btn" onclick="selectAnswer(6,'C',this,0)">C. Fermer les yeux</button>
+        </div>
+      </div>
+
+      <!-- Question 7 -->
+      <div class="question-card" data-score="0" data-category="ethique" data-best="A" data-best-text="Discussion privée d’abord → résolution interne sans drame public.">
+        <div class="question-text">7. Un autre staff prend décisions incohérentes (mute sans raison, favoritisme).</div>
+        <div class="question-options">
+          <button type="button" class="question-btn" onclick="selectAnswer(7,'A',this,10)">A. Parler en privé puis supérieurs si besoin</button>
+          <button type="button" class="question-btn" onclick="selectAnswer(7,'B',this,4)">B. Signaler directement fondateurs</button>
+          <button type="button" class="question-btn" onclick="selectAnswer(7,'C',this,0)">C. Fermer les yeux</button>
+        </div>
+      </div>
+
+      <!-- Question 8 -->
+      <div class="question-card" data-score="0" data-category="protection-utilisateur" data-best="A" data-best-text="Protection prioritaire + sanctions + accompagnement → responsabilité majeure.">
+        <div class="question-text">8. Mineur 14 ans harcelé sexuellement (pseudo/voix font croire 20 ans).</div>
+        <div class="question-options">
+          <button type="button" class="question-btn" onclick="selectAnswer(8,'A',this,10)">A. Ban harceleurs + contact parents + aide changement pseudo</button>
+          <button type="button" class="question-btn" onclick="selectAnswer(8,'B',this,5)">B. Kick tout le monde et fermer</button>
+          <button type="button" class="question-btn" onclick="selectAnswer(8,'C',this,0)">C. Dire "faut s’endurcir sur internet"</button>
+        </div>
+      </div>
+
+      <!-- Question 9 -->
+      <div class="question-card" data-score="0" data-category="gestion-technique" data-best="A" data-best-text="Communication transparente et présence → gestion de crise professionnelle.">
+        <div class="question-text">9. Serveur crash 3 fois en 30 min – joueurs rage en chat global.</div>
+        <div class="question-options">
+          <button type="button" class="question-btn" onclick="selectAnswer(9,'A',this,10)">A. Message calme + explication + délai réaliste + dispo</button>
+          <button type="button" class="question-btn" onclick="selectAnswer(9,'B',this,3)">B. Mute chat global 15 min</button>
+          <button type="button" class="question-btn" onclick="selectAnswer(9,'C',this,0)">C. Dire "c’est pas moi qui code"</button>
+        </div>
+      </div>
+
+      <!-- Question 10 -->
+      <div class="question-card" data-score="0" data-category="ethique" data-best="A" data-best-text="Transmission immédiate aux supérieurs sans confrontation personnelle → procédure sécurisée.">
+        <div class="question-text">10. Message anonyme détaillé accusant staff de corruption IRL avec "preuves".</div>
+        <div class="question-options">
+          <button type="button" class="question-btn" onclick="selectAnswer(10,'A',this,10)">A. Transmettre immédiatement fondateurs sans en parler ailleurs</button>
+          <button type="button" class="question-btn" onclick="selectAnswer(10,'B',this,4)">B. Demander plus de preuves à l’anonyme</button>
+          <button type="button" class="question-btn" onclick="selectAnswer(10,'C',this,0)">C. Confronter directement le staff accusé</button>
+        </div>
+      </div>
+
+      <div id="analysisSection" class="analysis-section hidden">
+        <h2>Rapport d'Analyse – Test 1</h2>
+        <div id="categoryAnalyses"></div>
+        <div id="bestAnswers"></div>
+        <div id="globalFeedback" class="global-feedback"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let totalScore = 0;
+    const categories = {
+      'gestion-conflit': { name: 'Gestion des Conflits', scores: [], max: 30 },
+      'ethique': { name: 'Éthique et Intégrité', scores: [], max: 40 },
+      'gestion-technique': { name: 'Gestion Technique et Crises', scores: [], max: 20 },
+      'protection-utilisateur': { name: 'Protection des Utilisateurs', scores: [], max: 10 }
+    };
+
+    function selectAnswer(qNum, answer, btn, score) {
+      const card = btn.closest('.question-card');
+      card.querySelectorAll('.question-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      const oldScore = parseInt(card.dataset.score || 0);
+      card.dataset.score = score;
+      card.classList.add('selected');
+
+      const cat = card.dataset.category;
+      if (cat && categories[cat]) {
+        const c = categories[cat];
+        const idx = c.scores.findIndex(s => s.qNum === qNum);
+        if (idx !== -1) c.scores[idx].score = score;
+        else c.scores.push({ qNum, score });
+      }
+
+      totalScore = totalScore - oldScore + score;
+      document.getElementById('totalScore').textContent = `Score : ${totalScore} / 100`;
+    }
+
+    function generateAnalysis() {
+      const allAnswered = document.querySelectorAll('.question-card').length === document.querySelectorAll('.question-card.selected').length;
+      if (!allAnswered) {
+        alert('Veuillez répondre à toutes les 10 questions.');
+        return;
+      }
+
+      const catDiv = document.getElementById('categoryAnalyses');
+      catDiv.innerHTML = '';
+
+      Object.keys(categories).forEach(key => {
+        const cat = categories[key];
+        const score = cat.scores.reduce((sum, item) => sum + item.score, 0);
+        const pct = (score / cat.max * 100).toFixed(0);
+        let fb = pct >= 80 ? 'Excellente maîtrise' :
+                 pct >= 60 ? 'Bon niveau – à peaufiner' :
+                 pct >= 40 ? 'Bases présentes mais lacunes' : 'À travailler sérieusement';
+
+        const item = document.createElement('div');
+        item.className = 'analysis-item';
+        item.innerHTML = `<span class="analysis-score">${cat.name} : ${score}/${cat.max} (${pct}%)</span><p>${fb}</p>`;
+        catDiv.appendChild(item);
+      });
+
+      // Meilleures réponses
+      const bestDiv = document.getElementById('bestAnswers');
+      bestDiv.innerHTML = '<h3 style="color:#ffaa00;margin:2rem 0 1rem;">Meilleures réponses attendues :</h3>';
+      document.querySelectorAll('.question-card').forEach(card => {
+        const num = card.querySelector('.question-text').textContent.match(/^\d+/)[0];
+        const best = card.dataset.best;
+        const explain = card.dataset.bestText || '(non défini)';
+        const selected = card.querySelector('.selected')?.textContent.trim().substring(0,3) || '?';
+
+        const el = document.createElement('div');
+        el.style.marginBottom = '1.2rem';
+        el.innerHTML = `
+          <strong>Q${num}</strong> – Meilleure : <span class="best-answer">${best}</span><br>
+          <small>Choisi : ${selected}</small><br>
+          <div class="best-explain">${explain}</div>
+        `;
+        bestDiv.appendChild(el);
+      });
+
+      // Feedback global
+      const pct = totalScore;
+      let cls = pct >= 80 ? 'excellent' : pct >= 60 ? 'good' : pct >= 40 ? 'average' : 'poor';
+      let msg = pct >= 80 ? 'Profil très solide – recommandé immédiatement' :
+                pct >= 60 ? 'Bon potentiel – mentoring conseillé' :
+                pct >= 40 ? 'Niveau moyen – formation nécessaire' : 'Profil inadapté – non recommandé';
+
+      const gf = document.getElementById('globalFeedback');
+      gf.className = `global-feedback ${cls}`;
+      gf.innerHTML = `<strong>Global : ${totalScore}/100</strong><p>${msg}</p>`;
+
+      document.getElementById('analysisSection').classList.remove('hidden');
+    }
+
+    window.addEventListener('load', () => {
+      document.getElementById('totalScore').textContent = `Score : 0 / 100`;
+    });
+  </script>
+</body>
+</html>
